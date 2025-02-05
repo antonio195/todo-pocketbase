@@ -12,6 +12,7 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:pocketbase/pocketbase.dart' as _i169;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../features/auth/controller/auth_controller.dart' as _i593;
 import '../../features/auth/repository/auth_repository.dart' as _i871;
@@ -32,10 +33,14 @@ extension GetItInjectableX on _i174.GetIt {
     final registerModule = _$RegisterModule();
     gh.factory<_i909.PocketBaseCore>(() => _i909.PocketBaseCore());
     gh.singleton<_i169.PocketBase>(() => registerModule.pocketBase);
-    gh.factory<_i871.AuthRepository>(
-        () => _i871.AuthRepository(pb: gh<_i169.PocketBase>()));
-    gh.factory<_i593.AuthController>(
-        () => _i593.AuthController(repository: gh<_i871.AuthRepository>()));
+    gh.singletonAsync<_i460.SharedPreferences>(
+        () => registerModule.sharedPreferences);
+    gh.factoryAsync<_i871.AuthRepository>(() async => _i871.AuthRepository(
+          pb: gh<_i169.PocketBase>(),
+          sharedPreferences: await getAsync<_i460.SharedPreferences>(),
+        ));
+    gh.singletonAsync<_i593.AuthController>(() async => _i593.AuthController(
+        repository: await getAsync<_i871.AuthRepository>()));
     return this;
   }
 }

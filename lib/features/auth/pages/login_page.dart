@@ -15,18 +15,20 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final authController = GetIt.I.get<AuthController>();
+  final AuthController _authController = GetIt.I.get();
 
   @override
   void initState() {
-    authController.addListener(callback);
+    _authController.addListener(callback);
 
     super.initState();
   }
 
   @override
   void dispose() {
-    authController.removeListener(callback);
+    _authController.removeListener(callback);
+
+    _authController.setContext(context);
 
     super.dispose();
   }
@@ -68,7 +70,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _authController.login(
+                  email: _emailController.text,
+                  password: _passwordController.text,
+                );
+              },
               child: Text(
                 "Entrar",
                 style: TextStyle(fontSize: 20),

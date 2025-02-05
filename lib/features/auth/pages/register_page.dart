@@ -16,7 +16,7 @@ class _LoginPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final _authController = GetIt.I.get<AuthController>();
+  final AuthController _authController = GetIt.I.get();
 
   @override
   void initState() {

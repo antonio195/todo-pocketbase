@@ -1,9 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:todo_pocketbase/features/auth/repository/auth_repository.dart';
 
-@Injectable()
+@singleton
 final class AuthController extends ChangeNotifier {
   AuthController({
     required AuthRepository repository,
@@ -25,6 +26,24 @@ final class AuthController extends ChangeNotifier {
         password: password,
       );
       showNotification("Cadastrado com sucesso");
+    } on ClientException catch (e) {
+      showNotification("${e.response}");
+    } catch (e) {
+      showNotification(e.toString());
+    }
+  }
+
+  void login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _repository.login(
+        email: email,
+        password: password,
+      );
+      showNotification("Logado com sucesso");
+      _context.router.pushNamed("path");
     } on ClientException catch (e) {
       showNotification("${e.response}");
     } catch (e) {
