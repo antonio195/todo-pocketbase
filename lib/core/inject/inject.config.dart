@@ -11,8 +11,12 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:pocketbase/pocketbase.dart' as _i169;
 
+import '../../features/auth/controller/auth_controller.dart' as _i593;
+import '../../features/auth/repository/auth_repository.dart' as _i871;
 import '../pocketbase/pocket_base_core.dart' as _i909;
+import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -25,7 +29,15 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    final registerModule = _$RegisterModule();
     gh.factory<_i909.PocketBaseCore>(() => _i909.PocketBaseCore());
+    gh.singleton<_i169.PocketBase>(() => registerModule.pocketBase);
+    gh.factory<_i871.AuthRepository>(
+        () => _i871.AuthRepository(pb: gh<_i169.PocketBase>()));
+    gh.factory<_i593.AuthController>(
+        () => _i593.AuthController(repository: gh<_i871.AuthRepository>()));
     return this;
   }
 }
+
+class _$RegisterModule extends _i291.RegisterModule {}
