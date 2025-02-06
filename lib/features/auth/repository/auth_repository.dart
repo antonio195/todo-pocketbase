@@ -39,9 +39,9 @@ final class AuthRepository {
     required String password,
   }) async {
     try {
-      final record = await _pb.collection("users").authWithPassword(email, password).then((auth) async {
-        await _sharedPreferences.setString("JWT", auth.token);
-      });
+      final record = await _pb.collection("users").authWithPassword(email, password);
+
+      await _sharedPreferences.setString("JWT", record.token);
 
       return record;
     } on ClientException catch (_) {

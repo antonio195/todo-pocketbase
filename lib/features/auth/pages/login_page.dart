@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     _authController.addListener(callback);
+    _authController.setContext(context);
 
     super.initState();
   }
@@ -27,8 +28,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _authController.removeListener(callback);
-
-    _authController.setContext(context);
 
     super.dispose();
   }
@@ -74,6 +73,9 @@ class _LoginPageState extends State<LoginPage> {
                 _authController.login(
                   email: _emailController.text,
                   password: _passwordController.text,
+                  onSuccess: () {
+                    context.router.pushNamed("/home");
+                  },
                 );
               },
               child: Text(

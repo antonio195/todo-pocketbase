@@ -40,7 +40,9 @@ extension GetItInjectableX on _i174.GetIt {
           sharedPreferences: await getAsync<_i460.SharedPreferences>(),
         ));
     gh.singletonAsync<_i593.AuthController>(() async => _i593.AuthController(
-        repository: await getAsync<_i871.AuthRepository>()));
+          repository: await getAsync<_i871.AuthRepository>(),
+          sharedPreferences: await getAsync<_i460.SharedPreferences>(),
+        ));
     return this;
   }
 }
